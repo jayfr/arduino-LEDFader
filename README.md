@@ -1,8 +1,14 @@
 Background LED Fading Library for Arduino
 ========================================
 
-(Note: Modified by Jay@ReactiveTechnologies.com to allow the use of a helper function to set PWM values on alternative hardware.  This README needs to be modified to show an example.)
-(Original by Jeremy Gillick, http://blog.mozmonkey.com)
+Note: Modified by Jay@ReactiveTechnologies.com to allow the use of a helper function to set PWM values on alternative hardware.  This README needs to be modified to show an example.  Example code does exist in the examples folder.
+
+PWM helper function modification inspired and funded by Todd Hammer, http://www.toddhammerart.com
+
+Original library by Jeremy Gillick, http://blog.mozmonkey.com
+
+========================================
+
 
 This arduino library can fade individual LEDs in the background without blocking your main program.
 
