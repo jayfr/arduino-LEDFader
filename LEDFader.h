@@ -14,7 +14,10 @@
 // adjust this to modify performance.
 #define MIN_INTERVAL 20
 
+#define PWM_PIN NULL
+
 class LEDFader {
+  void (*do_pwm)(uint8_t channel, uint8_t value);
   uint8_t pin;
   unsigned long last_step_time;
   unsigned int interval;
@@ -27,6 +30,9 @@ class LEDFader {
 
     // Create a new LED Fader for a pin
     LEDFader(uint8_t pwm_pin=0);
+
+    // Create a new LED Fader with a helper function
+    LEDFader(void (*helper)(uint8_t channel, uint8_t value), uint8_t pwm_pin=0);
 
     // Set the PWM pin that the LED is connected to
     void set_pin(uint8_t pwm_pin);

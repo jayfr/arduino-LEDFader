@@ -8,6 +8,18 @@
 #include "LEDFader.h"
 
 LEDFader::LEDFader(uint8_t pwm_pin) {
+  do_pwm = NULL;
+  pin = pwm_pin;
+  color = 0;
+  to_color = 0;
+  last_step_time = 0;
+  interval = 0;
+  duration = 0;
+  percent_done = 0;
+}
+
+LEDFader::LEDFader(void (*helper)(uint8_t channel, uint8_t value), uint8_t pwm_pin) {
+  do_pwm = helper;
   pin = pwm_pin;
   color = 0;
   to_color = 0;
@@ -20,15 +32,21 @@ LEDFader::LEDFader(uint8_t pwm_pin) {
 void LEDFader::set_pin(uint8_t pwm_pin) {
   pin = pwm_pin;
 }
+
 uint8_t LEDFader::get_pin(){
   return pin;
 }
 
 
 void LEDFader::set_value(int value) {
-  if (!pin) return;
+  if (!pin && (do_pwm == NULL)) return;
   color = (uint8_t)constrain(value, 0, 255);
-  analogWrite(pin, color);
+  if (do_pwm == NULL) {
+    analogWrite(pin, color);    
+  }
+  else {
+    (*do_pwm)(pin, color);
+  }
 }
 
 uint8_t LEDFader::get_value() {
@@ -62,7 +80,7 @@ void LEDFader::fade(uint8_t value, unsigned int time) {
   percent_done = 0;
 
   // No pin defined
-  if (!pin) {
+  if (!pin && (do_pwm == NULL)) {
     return;
   }
 
@@ -91,7 +109,7 @@ void LEDFader::fade(uint8_t value, unsigned int time) {
 }
 
 bool LEDFader::is_fading() {
-  if (!pin)
+  if (!pin && (do_pwm == NULL)) 
     return false;
   if (duration > 0)
     return true;
@@ -110,7 +128,7 @@ uint8_t LEDFader::get_progress() {
 bool LEDFader::update() {
 
   // No pin defined
-  if (!pin) {
+  if (!pin && (do_pwm == NULL)) {
     return false;
   }
 
